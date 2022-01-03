@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/JS/test.js" defer></script>
+    <link rel="stylesheet" href="../CSS/reset.css">
+
+
+    <title>랜덤 정렬</title>
+</head>
+<style>
+    .random {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        max-width: 1800px;
+        margin: 0 auto;
+    }
+
+    .random li {
+        width: calc((100% / 6) - 24px);
+        height: 13vw;
+        line-height: 13vw;
+        text-align: center;
+        margin-bottom: 24px;
+        cursor: pointer;
+        transition: background .5s;
+    }
+
+    .btnBox {
+        width: 500px;
+        margin: 20px auto 40px;
+        display: flex;
+
+    }
+
+    .ranBtn {
+        width: 100px;
+        height: 50px;
+        margin: 0 auto;
+        line-height: 50px;
+        background: beige;
+        text-align: center;
+        cursor: pointer;
+    }
+</style>
+
+<body>
+    <div class="btnBox">
+        <div class="ranBtn ranSort">랜덤 정렬</div>
+        <div class="ranBtn ranColor">랜덤 컬러</div>
+        <div class="ranBtn default">컬러 초기화</div>
+    </div>
+    <ul class="random">
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+        <li>6</li>
+        <li>7</li>
+        <li>8</li>
+        <li>9</li>
+        <li>10</li>
+        <li>11</li>
+        <li>12</li>
+        <li>13</li>
+        <li>14</li>
+        <li>15</li>
+        <li>16</li>
+        <li>17</li>
+        <li>18</li>
+    </ul>
+</body>
+<script>
+
+    jQuery(".ranSort").click(function () {
+        var _ = jQuery;
+        var len = _(".random li").length;
+        _(".random").each(function () {
+            var ul = _(this);
+            var liArr = ul.children('li');
+            liArr.sort(function () {
+                var ran = parseInt(Math.random() * len);
+                var ran1 = parseInt(Math.random() * len);
+
+                return ran1 - ran;
+
+            }).appendTo(ul);
+
+        });
+    });
+    jQuery(".ranColor").click(function () {
+        jQuery(".random li").each(function () {
+            var x = Math.ceil(Math.random() * 255)
+            var y = Math.ceil(Math.random() * 255)
+            var z = Math.ceil(Math.random() * 255)
+
+            var _this = $(this);
+
+            _this.css("background", "rgb(" + x + "," + y + "," + z + ")")
+
+        });
+    })
+
+    jQuery(".random li").click(function () {
+        var x = Math.ceil(Math.random() * 255)
+        var y = Math.ceil(Math.random() * 255)
+        var z = Math.ceil(Math.random() * 255)
+
+        $(this).css("background", "rgb(" + x + "," + y + "," + z + ")")
+    })
+    jQuery(".default").click(function () {
+        $(".random li").css("background", "#fff")      
+
+    });
+
+
+
+</script>
+
+</html>

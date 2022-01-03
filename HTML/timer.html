@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <link rel="stylesheet" href="../CSS/reset.css">
+    <title>Timer</title>
+</head>
+<style>
+  
+.timer{
+  width : 100%;
+  font-size : 5rem;
+  position: absolute;
+  top : 50%;
+  left : 50%;
+  transform : translate(-50%,-50%);
+  display: inline-block;
+  text-align: center;
+  line-height: 8rem;  
+}
+
+    
+</style>
+
+<body>
+  <div class ="timer">
+    <h3 class ="start-day">시작 날짜 : <span></span></h3>
+    <h3 class ="end-day">종료 날짜 : <span></span></h3>
+    <h3 class ="end-time">남은 시간 : <span></span></h3>
+  </div>
+  
+
+</body>
+
+
+<script>
+
+    //타임세일 기능
+    var startDay = new Date("2021/08/03 10:00:00"); //시작 일자
+    var endDay = new Date("2021/08/10 13:51:50"); //종료 일자
+    jQuery(".start-day>span").html(startDay.toLocaleString())
+    jQuery(".end-day>span").html(endDay.toLocaleString())
+    //남은 시간 구하기
+    var counter = setInterval(function () {
+      var now = new Date(); //현재 날짜 가져오기
+      var distance = endDay.getTime() - now;
+      // var d = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var h = Math.floor((distance / (1000 * 60 * 60 * 24)) * (24));
+      if (h < 10) {
+        h = '0' + h;
+      }
+      var m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      if (m < 10) {
+        m = '0' + m;
+      }
+      var s = Math.floor((distance % (1000 * 60)) / 1000);
+      if (s < 10) {
+        s = '0' + s;
+      }
+  
+      jQuery('.end-time>span').html(h + '시간' + ' : ' + m + '분' + ' : ' + s + '분')
+      //종료 시 실행
+      if (Math.floor(distance / 1000) < 0 || (Math.floor(now - startDay.getTime())) < 0) {
+        jQuery(".end-time>span").html("종료");
+        clearInterval(counter)
+
+      // 종료가 아닐 때 실행
+      } else {
+        
+      }
+  
+    }, 500); 
+  
+
+</script>
+
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/JS/test.js" defer></script>
+    <link rel="stylesheet" href="../CSS/reset.css">
+    <title>구글 API </title>
+    <style>
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+
+        #map-section {
+            position: fixed;
+            right: 10%;
+            top: 50%;
+            transform: translate(0%, -50%);
+            height: 600px;
+            width: 600px;
+            margin: 0 auto;
+        }
+
+        #map img {
+            max-width: none;
+        }
+
+        .boardList {
+            float: left;
+        }
+
+        .boardList li {
+            width: 500px;
+            height: 300px;
+            line-height: 50px;
+            text-align: center;
+            margin: 10px 10px;
+            cursor: pointer;
+            border: 1px solid #000;
+            box-sizing: border-box;
+
+        }
+    </style>
+</head>
+
+<body>
+    <section>
+        <ul class="boardList">
+            <li data-wido="37.492554" data-gyeongdo="126.918546">위치1</li>
+            <li data-wido="37.504554" data-gyeongdo="126.928546">위치2</li>
+            <li data-wido="37.516554" data-gyeongdo="126.938546">위치3</li>
+            <li data-wido="37.528554" data-gyeongdo="126.948546">위치4</li>
+            <li data-wido="37.530554" data-gyeongdo="126.958546">위치5</li>
+            <li data-wido="37.542554" data-gyeongdo="126.968546">위치6</li>
+            <li data-wido="37.554554" data-gyeongdo="126.978546">위치7</li>
+            <li data-wido="37.57554" data-gyeongdo="126.978546">위치8</li>
+            <li data-wido="37.589554" data-gyeongdo="126.998546">위치9</li>
+        </ul>
+    </section>
+    <section id="map-section">
+        <div id="map">
+
+            <script>
+
+                function initMap() {
+                    $(".boardList li").click(function () {
+                        return idx = $(this).index();
+                    })
+                    var cityHall = { lat: 37.542554, lng: 126.978546 };
+                    var defaultOptions = {
+                        zoom: 12,
+                        center: cityHall,
+                    };
+
+                    var map = new google.maps.Map(document.getElementById('map'), defaultOptions);
+                    var _icon = ["https://lh3.googleusercontent.com/ogw/ADGmqu8S9lSZKpEvC1thUyUR_8jMGo9Poe-bDBBuLhZB9A=s32-c-mo", null]
+                    const infoWindow = new google.maps.InfoWindow();
+
+                    setTimeout(function setMarker() {
+                        $(".boardList li").each(function (num) {
+                            var marker = new google.maps.Marker({
+                                position: new google.maps.LatLng($(this).data().wido, $(this).data().gyeongdo),
+                                map,
+                                title: $(this).text(),
+                            });
+
+                            marker.addListener("click", () => {
+                                google.maps.event.addListener(marker, "click", move_map(marker));
+
+                            });
+
+                            $(this).click(function () {
+                                google.maps.event.addListener(marker, "click", move_map(marker));
+                            })
+
+                            //스크롤 이동
+                            function move_scroll(num) {
+                                $("html").stop().animate({ scrollTop: $(".boardList li").eq(num).offset().top - (($(window).height()/2)-150) }, 400);
+                            }
+                            // 구글 맵 이동
+                            function move_map(marker) {
+                                infoWindow.open(marker.getMap(), marker);
+                                infoWindow.setContent(marker.getTitle());
+                                if (marker.getAnimation() !== null) {
+                                    marker.setAnimation(null);
+
+                                } else {
+                                    marker.setAnimation(google.maps.Animation.BOUNCE);
+                                    marker.icon = null;
+                                    infoWindow.open(marker.getMap(), marker);
+                                    infoWindow.setContent(marker.getTitle());
+                                    setTimeout(() => { marker.setAnimation(null) }, 1000)
+                                }
+                                $(".boardList li").css("background","")
+                                $(".boardList li").eq(num).css("background","rgb(0 0 0 / 10%)")
+                                //마커 클릭시 해당 리스트로 스크롤 이동 함수실행
+                                move_scroll(num);
+
+                                map.setCenter(marker.getPosition());
+                                map.panTo(marker.getPosition());
+
+                            }
+
+                        })
+
+                    })
+                }
+
+            </script>
+            <script
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDXQLP5CE8CAI3-Qdds_IViC7RKBzswv10&callback=initMap"></script>
+        </div>
+    </section>
+</body>
+
+</html>

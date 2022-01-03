@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css" />
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.js"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+    <script src="/JS/test.js" defer></script>
+    <link rel="stylesheet" href="../CSS/reset.css">
+
+
+    <title>swiper</title>
+</head>
+<style>
+    .page-load {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0px;
+        left: 0px;
+        background: rgb(0, 0, 0);
+        z-index: 99999999;
+    }
+
+    .page-load>.load-logo {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transition: all 0.5s ease 0s;
+        opacity: 1;
+        webkit-transform: translate(-50%, -50%) scale(1);
+        -moz-transform: translate(-50%, -50%) scale(1);
+        -ms-transform: translate(-50%, -50%) scale(1);
+        -o-transform: translate(-50%, -50%) scale(1);
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    .page-load>.load-logo.fade {
+        opacity: 0;
+        webkit-transform: translate(-50%, -50%) scale(2);
+        -moz-transform: translate(-50%, -50%) scale(2);
+        -ms-transform: translate(-50%, -50%) scale(2);
+        -o-transform: translate(-50%, -50%) scale(2);
+        transform: translate(-50%, -50%) scale(2);
+    }
+
+    header.header .frameout_logo {
+        display: block;
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        width: 222px;
+        height: 66px;
+        box-sizing: border-box;
+        z-index: 50;
+        background: url("http://www.frameout.co.kr/images/logo.png") 20px 20px / 182px no-repeat;
+    }
+
+    header.header .frameout_logo.black {
+        background: url("http://www.frameout.co.kr/images/logo_black.png") 20px 20px / 182px no-repeat;
+    }
+
+    header.header .frameout_logo span {
+        font-size: 0px;
+    }
+
+    header.header .all_menu {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: 84px;
+        height: 65px;
+        box-sizing: border-box;
+        z-index: 9999999;
+        transition: all 0.3s ease 0s;
+    }
+
+    header.header .all_menu span {
+        display: block;
+        transition: all 0.6s ease 0s;
+    }
+
+    header.header .all_menu .first {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        width: 44px;
+        height: 5px;
+        box-sizing: border-box;
+        background-image: url("http://www.frameout.co.kr/images/all_menu_pc_first.png");
+        background-position: 0px 0px;
+        background-repeat: no-repeat;
+        background-attachment: initial;
+        background-origin: initial;
+        background-clip: initial;
+        background-color: initial;
+        background-size: cover !important;
+    }
+
+    header.header .all_menu .last {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        width: 44px;
+        height: 5px;
+        box-sizing: border-box;
+        background-image: url("http://www.frameout.co.kr/images/all_menu_pc_last.png");
+        background-position: 0px 0px;
+        background-repeat: no-repeat;
+        background-attachment: initial;
+        background-origin: initial;
+        background-clip: initial;
+        background-color: initial;
+        background-size: cover !important;
+    }
+
+    header.header .all_menu.white_menu .first {
+        background-image: url("http://www.frameout.co.kr/images/all_menu_pc_first.png");
+        background-position: 0px 0px;
+        background-repeat: no-repeat;
+        background-attachment: initial;
+        background-origin: initial;
+        background-clip: initial;
+        background-color: initial;
+        filter: drop-shadow(black 1px 1px 1px);
+        background-size: cover !important;
+    }
+
+    header.header .all_menu.white_menu .last {
+        background-image: url("http://www.frameout.co.kr/images/all_menu_pc_first.png");
+        background-position: 0px 0px;
+        background-repeat: no-repeat;
+        background-attachment: initial;
+        background-origin: initial;
+        background-clip: initial;
+        background-color: initial;
+        filter: drop-shadow(black 1px 1px 1px);
+        background-size: cover !important;
+    }
+
+    header.header .all_menu.active {
+        top: 50px;
+    }
+
+    header.header .all_menu.active .first {
+        transform: rotate(135deg);
+        top: 0px;
+        left: 8px;
+        background: url("http://www.frameout.co.kr/images/all_menu_pc_last_white.png") 0px 0px no-repeat;
+    }
+
+    header.header .all_menu.active .last {
+        top: 0px;
+        left: 8px;
+        transform: rotate(-135deg);
+        background: url("http://www.frameout.co.kr/images/all_menu_pc_last_white.png") 0px 0px no-repeat;
+    }
+
+    header.header .all_menu_wrap {
+        position: fixed;
+        top: 0px;
+        right: 0px;
+        width: 100%;
+        height: 100vh;
+        box-sizing: border-box;
+        background: rgba(0, 0, 0, 0.9);
+        display: none;
+        z-index: 99999;
+    }
+
+    header.header .all_menu_wrap.active {
+        display: block;
+    }
+
+    header.header .all_menu_wrap nav {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    header.header .all_menu_wrap nav ul {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 80%;
+    }
+
+    header.header .all_menu_wrap nav ul li {
+        position: relative;
+        display: block;
+        width: 100%;
+        padding: 0px 2%;
+        box-sizing: border-box;
+    }
+
+    header.header .all_menu_wrap nav ul li a {
+        position: relative;
+        display: block;
+        font-size: 90px;
+        color: rgb(255, 255, 255);
+        line-height: 1;
+        white-space: nowrap;
+        letter-spacing: -1px;
+        font-weight: bold;
+    }
+
+    header.header .all_menu_wrap nav ul li a em {
+        display: inline-block;
+        margin-left: 5px;
+        margin-bottom: 10px;
+        vertical-align: baseline;
+        width: 13px;
+        height: 13px;
+        box-sizing: border-box;
+        background: rgb(232, 39, 1);
+        color: rgb(232, 39, 1);
+        font-style: normal;
+        font-size: 0px;
+        border-radius: 50%;
+    }
+
+    header.header .all_menu_wrap nav ul li a.hover {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgb(232, 39, 1);
+        width: 0px;
+        height: 0px;
+        box-sizing: border-box;
+        transform-origin: center center;
+        overflow: hidden;
+        transition: all 0.5s ease 0s;
+        border-radius: 50%;
+    }
+
+    header.header .all_menu_wrap nav ul li a.hover span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 7vw;
+    }
+
+    header.header .all_menu_wrap nav ul li:hover a.hover {
+        width: 120px;
+        height: 120px;
+        box-sizing: border-box;
+    }
+
+    header.header .all_menu_wrap footer {
+        position: absolute;
+        bottom: 36px;
+        left: 40px;
+        font-size: 15px;
+        color: rgb(255, 255, 255);
+    }
+
+    .wheel-slider.swiper-initialized.swiper-horizontal.swiper-pointer-events {
+        height: 100vh;
+        overflow: hidden;
+        position: relative;
+        transition: opacity 1s ease 0s;
+    }
+
+    .wheel-slider.active {
+        opacity: 0.6;
+    }
+
+    .wheel-slider.swiper-initialized.swiper-horizontal.swiper-pointer-events .swiper-slide>.contents {
+        height: 100%;
+    }
+
+    .wheel-slider .swiper-slide .description {
+        width: 100%;
+        height: 100%;
+    }
+
+    .wheel-slider .swiper-slide a.move-link {
+        display: block;
+        width: 100%;
+        height: 100%;
+        z-index: 99999;
+    }
+
+    .wheel-slider .swiper-slide .description .red-box {
+        width: 43%;
+        height: 22%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: url("http://www.frameout.co.kr/images/line_leftTop.png") 0px 0px no-repeat, url("http://www.frameout.co.kr/images/line_rightTop.png") 100% 0px no-repeat, url("http://www.frameout.co.kr/images/line_rightBottom.png") 100% 100% no-repeat, url("http://www.frameout.co.kr/images/line_leftBottom.png") 0px 100% no-repeat;
+        z-index: 9;
+        transition: all 0.3s ease 0s;
+    }
+
+    .wheel-slider .swiper-slide .description .red-box.active1 {
+        width: 35%;
+        height: 46%;
+    }
+
+    .wheel-slider .swiper-slide .description .red-box.active2 {
+        width: 90%;
+        height: 84%;
+    }
+
+    .wheel-slider .swiper-slide .description .red-box.active1::before {
+        opacity: 0;
+        transition: all 0.3s ease 0s;
+    }
+
+    .wheel-slider .swiper-slide .description .red-box.active1::after {
+        opacity: 0;
+        transition: all 0.3s ease 0s;
+    }
+
+    .wheel-slider .swiper-slide .description .red-box::before {
+        position: absolute;
+        top: 0px;
+        left: 30px;
+        right: 30px;
+        height: 100%;
+        border-top: 18px solid rgb(255, 42, 0);
+        border-bottom: 18px solid rgb(255, 42, 0);
+        box-sizing: border-box;
+        transition: all 0.3s ease 0s;
+        content: "";
+    }
+
+    .wheel-slider .swiper-slide .description .red-box::after {
+        position: absolute;
+        top: 30px;
+        bottom: 30px;
+        left: 0px;
+        width: 100%;
+        border-left: 18px solid rgb(255, 42, 0);
+        border-right: 18px solid rgb(255, 42, 0);
+        box-sizing: border-box;
+        transition: all 0.3s ease 0s;
+        content: "";
+    }
+
+    .wheel-slider .swiper-slide .description .mask_ani_box {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scaleX(-1);
+        width: 86%;
+    }
+
+    .wheel-slider .swiper-slide .description .mask_ani_box>.mask_box {
+        height: 75px;
+        width: 0%;
+        background: rgb(255, 255, 255);
+        display: block;
+        margin-bottom: 14px;
+    }
+
+    .wheel-slider .swiper-slide .description .mask_ani_box.now>.mask_box.text01 {
+        animation: 0.25s ease 1.5s 1 normal none running maskAni;
+    }
+
+    .wheel-slider .swiper-slide .description .mask_ani_box.now>.mask_box.text02 {
+        animation: 0.25s ease 1.6s 1 normal none running maskAni;
+    }
+
+    .wheel-slider .swiper-slide .description .mask_ani_box.now>.mask_box.text03 {
+        animation: 0.25s ease 1.7s 1 normal none running maskAni;
+    }
+
+    .wheel-slider .swiper-slide .description .mask_ani_box>.mask_box:last-of-type {
+        margin-bottom: 0px;
+    }
+
+    .wheel-slider .swiper-slide .description .animation-box {
+        transform: scale(15);
+        transition: none 0s ease 0s;
+    }
+
+    .wheel-slider .swiper-slide.swiper-slide-active .description .animation-box.click {
+        transform: scale(1);
+    }
+
+    .wheel-slider .swiper-slide.swiper-slide-active .description .animation-box {
+        position: absolute;
+        left: 0px;
+        top: -26px;
+        width: 100%;
+        height: 103%;
+        background: radial-gradient(circle, rgba(0, 0, 0, 0) 26%, rgba(0, 0, 0, 0.9) 20%);
+        transition: transform 0.3s ease-in-out 0s;
+        z-index: 2;
+        transform: scale(6);
+    }
+
+    .wheel-slider .swiper-slide .description .txt_area {
+        display: block;
+        margin: 0px auto;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10;
+    }
+
+    @-webkit-keyframes maskAni {
+        0% {
+            width: 100%;
+        }
+
+        100% {
+            width: 0%;
+        }
+    }
+
+    @keyframes maskAni {
+        0% {
+            width: 100%;
+        }
+
+        100% {
+            width: 0%;
+        }
+    }
+
+    .wheel-slider .pagination {
+        position: absolute;
+        left: 0px;
+        bottom: 4%;
+        z-index: 9999;
+        width: 148px;
+    }
+
+    .wheel-slider .scrolling {
+        position: absolute;
+        bottom: 40px;
+        right: 40px;
+        z-index: 10;
+        width: 130px;
+        height: 32px;
+        box-sizing: border-box;
+        background-image: url("http://www.frameout.co.kr/images/bg_scrolling.png");
+        background-position: 0px 0px;
+        background-repeat: no-repeat;
+        background-attachment: initial;
+        background-origin: initial;
+        background-clip: initial;
+        background-color: initial;
+        background-size: cover !important;
+    }
+
+    .wheel-slider .pagination>span {
+        font-family: HelveticaNeue;
+        letter-spacing: -3px;
+        display: block;
+        font-size: 60px;
+        line-height: 1;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .wheel-slider .pagination>span.now-slide {
+        color: rgb(255, 42, 0);
+    }
+
+    .wheel-slider .pagination>span.total-slide {
+        margin-top: -15px;
+        -webkit-text-fill-color: rgba(0, 0, 0, 0);
+        -webkit-text-stroke: 0.5px rgb(255, 255, 255);
+        color: rgb(255, 255, 255);
+    }
+
+    .wheel-slider .pagination>span.progress {
+        position: relative;
+        top: -5px;
+        width: 100%;
+        height: 2px;
+        background: rgb(220, 218, 220);
+    }
+
+    .wheel-slider .pagination>span.progress>.bar {
+        width: 0%;
+        height: 100%;
+        display: block;
+        background: red;
+    }
+
+    .wheel-slider .pagination>span.progress>.bar.now {
+        animation: 5s ease 0s 1 normal none running progressBar;
+    }
+
+    @-webkit-keyframes progressBar {
+        0% {
+            width: 0%;
+        }
+
+        100% {
+            width: 100%;
+        }
+    }
+
+    @keyframes rotate {
+        0% {
+            width: 0%;
+        }
+
+        100% {
+            width: 100%;
+        }
+    }
+
+    .wheel-slider .swiper-button-next::after,
+    .wheel-slider .swiper-button-prev::after {
+        letter-spacing: -3px;
+        display: block;
+        line-height: 1;
+        font-weight: bold;
+        -webkit-text-fill-color: rgba(0, 0, 0, 0);
+        -webkit-text-stroke: 0.5px rgb(255, 255, 255);
+        font-size: 100px;
+        font-family: HelveticaNeue !important;
+        text-transform: uppercase !important;
+    }
+
+    .wheel-slider .swiper-button-next {
+        right: 0px;
+        width: 273px;
+    }
+
+    .wheel-slider .swiper-button-prev {
+        width: 240px;
+        left: 0px;
+    }
+</style>
+
+<body>
+    <div class="page-load">
+        <div class="load-logo"><img src="	http://www.frameout.co.kr/images/logo.png" alt="로고"></div>
+    </div>
+
+    <header class="header">
+        <a href="/" class="frameout_logo" style=""><span>Frameout LOGO</span></a><a href="javascript:void(0);"
+            class="all_menu"><span class="first"></span><span class="last"></span></a>
+        <div class="all_menu_wrap">
+            <nav>
+                <ul>
+                    <li><a href="/" class="en">About<em>.</em></a><a href="/about"
+                            class="hover en"><span>About</span></a>
+                    </li>
+                    <li><a href="/" class="en">Work<em>.</em></a><a href="/work/workList"
+                            class="hover en"><span>Work</span></a></li>
+                    <li><a href="/" class="en">Award<em>.</em></a><a href="/award"
+                            class="hover en"><span>Award</span></a>
+                    </li>
+                    <li><a href="/" class="en">Contact<em>.</em></a><a href="/contact"
+                            class="hover en"><span>Contact</span></a></li>
+                </ul>
+            </nav>
+        </div>
+
+
+        <div class="wheel-slider">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="contents"
+                        style="background : url(https://frameoutweb.s3.ap-northeast-2.amazonaws.com/upload/202012/0ec4ae43-42ba-4c93-b8e9-9a85155137ec.jpg)no-repeat 100% 100%">
+                        <a class="move-link" href="javascript:void(0)" data-link="https://www.makeshop.co.kr/">
+                            <div class="description">
+                                <div class="animation-box"></div>
+                                <div class="txt_area">
+                                    <img src="https://frameoutweb.s3.ap-northeast-2.amazonaws.com/upload/202012/20c25c0c-34d9-4f60-8d63-99633d68a753.png"
+                                        alt="" class="img_change text">
+                                    <div class="mask_ani_box">
+                                        <span class="mask_box text01"></span>
+                                        <span class="mask_box text02"></span>
+                                        <span class="mask_box text03"></span>
+                                    </div>
+                                </div>
+                                <div class="red-box">
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="contents"
+                        style="background : url(https://frameoutweb.s3.ap-northeast-2.amazonaws.com/upload/202012/e59f0f17-1cc4-4c29-85aa-420c5564fcc9.jpg)no-repeat 100% 100%">
+                        <a class="move-link" href="javascript:void(0)" data-link="https://www.makeshop.co.kr/">
+                            <div class="description">
+                                <div class="animation-box"></div>
+                                <div class="txt_area">
+                                    <img src="https://frameoutweb.s3.ap-northeast-2.amazonaws.com/upload/202012/ca38768c-b55f-4d2c-9d5b-ba46693223c6.png"
+                                        alt="" class="img_change text">
+                                    <div class="mask_ani_box">
+                                        <span class="mask_box text01"></span>
+                                        <span class="mask_box text02"></span>
+                                        <span class="mask_box text03"></span>
+                                    </div>
+                                </div>
+                                <div class="red-box">
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="contents"
+                        style="background : url(https://frameoutweb.s3.ap-northeast-2.amazonaws.com/upload/202012/e497d168-0991-4fab-b5f4-f7ff07aa0455.jpg)no-repeat 100% 100%">
+                        <a class="move-link" href="javascript:void(0)" data-link="https://www.makeshop.co.kr/">
+                            <div class="description">
+                                <div class="animation-box"></div>
+                                <div class="txt_area">
+                                    <img src="https://frameoutweb.s3.ap-northeast-2.amazonaws.com/upload/202012/1efcff05-1d33-4b59-92fe-06ae7f3095bb.png"
+                                        alt="" class="img_change text">
+                                    <div class="mask_ani_box">
+                                        <span class="mask_box text01"></span>
+                                        <span class="mask_box text02"></span>
+                                        <span class="mask_box text03"></span>
+                                    </div>
+                                </div>
+                                <div class="red-box">
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="contents"
+                        style="background : url(https://frameoutweb.s3.ap-northeast-2.amazonaws.com/upload/202012/da25c3fe-d074-401d-91f6-2de63d81a7aa.jpg)no-repeat 100% 100%">
+                        <a class="move-link" href="javascript:void(0)" data-link="https://www.daum.net/">
+                            <div class="description">
+                                <div class="animation-box"></div>
+                                <div class="txt_area">
+                                    <img src="https://frameoutweb.s3.ap-northeast-2.amazonaws.com/upload/202012/f18fb76b-e2ef-4e1d-b4b5-4d9ca69f1e78.png"
+                                        alt="" class="img_change text">
+                                    <div class="mask_ani_box">
+                                        <span class="mask_box text01"></span>
+                                        <span class="mask_box text02"></span>
+                                        <span class="mask_box text03"></span>
+                                    </div>
+                                </div>
+                                <div class="red-box">
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-pagination"></div>
+
+            <div class="pagination">
+                <!--하단영역-->
+                <span class="now-slide">02</span>
+                <span class="progress "><em class="bar"></em></span>
+                <span class="total-slide"></span>
+            </div>
+            <div class="scrolling"></div>
+        </div>
+
+</body>
+<script>
+    jQuery(".wheel-slider>.pagination>.total-slide").text("0" + jQuery(".wheel-slider .swiper-slide").length)
+
+    let wheelSlider = new Swiper(".wheel-slider", {
+        loop: true,
+        touchRatio: 0,
+        autoplay: {
+            delay: 5000,
+            disableOnInteraction: true // 쓸어 넘기거나 버튼 클릭 시 자동 슬라이드 정지.
+        },
+        speed: 500,
+        slidesPerView: 1,
+        spaceBetween: 0,
+        mousewheel: {
+            invert: true,
+        },
+        navigation: {
+            nextEl: ".wheel-slider .swiper-button-next",
+            prevEl: ".wheel-slider .swiper-button-prev",
+        },
+        on: {
+            slideChange: function (swiper) {
+                jQuery(".wheel-slider>.pagination>.now-slide").text("0" + Number(swiper.realIndex + 1))
+                jQuery(".wheel-slider .pagination> .progress > .bar").removeClass("now")
+                jQuery(".wheel-slider .swiper-slide .description .mask_ani_box").removeClass("now")
+            },
+            slideChangeTransitionEnd: function () {
+                jQuery(".wheel-slider .pagination> .progress > .bar").addClass("now")
+                jQuery(".wheel-slider .swiper-slide .description .mask_ani_box").addClass("now")
+
+
+            }
+        },
+
+    });
+
+    jQuery(window).load(function () {
+        jQuery(".page-load>.load-logo").addClass("fade")
+
+        setTimeout(function () {
+            jQuery(".page-load").fadeOut()
+        }, 500)
+    })
+
+
+
+
+    // gnb menu
+    jQuery('.all_menu').off('click').on('click', function () {
+        if (!jQuery(this).hasClass('active')) {
+            jQuery(this).addClass('active');
+            jQuery('.all_menu_wrap').addClass('active');
+        } else {
+            jQuery(this).removeClass('active');
+            jQuery('.all_menu_wrap').removeClass('active');
+        }
+    });
+    var logoClass = jQuery('.frameout_logo').attr("class");
+    jQuery('.all_menu').on("click", function () {
+        var _target = jQuery(this).siblings('.frameout_logo');
+        if (jQuery(this).hasClass('active')) {
+            _target.removeClass('black').css('z-index', '60');
+        } else {
+            if (logoClass.indexOf('black') > -1) {
+                _target.addClass('black');
+            }
+            _target.css('z-index', '50');
+        }
+    });
+
+    jQuery(".wheel-slider .swiper-slide a.move-link").click(function () {
+        let _this = jQuery(this)
+        let _link = _this.attr("data-link")
+        wheelSlider.autoplay.stop()
+        _this.find(".description .animation-box").addClass("click")
+        jQuery(".wheel-slider .swiper-slide .description .red-box").addClass("active1")
+        jQuery(".wheel-slider .swiper-button-prev,.wheel-slider .swiper-button-next, .wheel-slider .pagination, .wheel-slider .scrolling ").hide();
+
+        setTimeout(function () {
+            _this.find(".description .animation-box").removeClass("click")
+            jQuery(".wheel-slider .swiper-slide .description .red-box").addClass("active2")
+            setTimeout(function () {
+                jQuery(".wheel-slider").addClass("active")
+                setTimeout(function () {
+                    location.href = _link
+                }, 500)
+            }, 300)
+        }, 1000)
+
+    })
+</script>
+
+</html>

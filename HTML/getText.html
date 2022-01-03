@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/JS/test.js" defer></script>
+
+    <link rel="stylesheet" href="../CSS/reset.css">
+    <title>test</title>
+</head>
+<style>
+    #wrap {
+        width: 300px;
+        box-sizing: border-box;
+        padding: 20px;
+        border: 2px solid red;
+        margin: 50px auto;
+    }
+
+    .c-1 {
+        width: 250px;
+        padding: 20px;
+        box-sizing: border-box;
+        border: 2px solid red;
+        margin: 10px 0;
+    }
+
+    .c-1-1,
+    .c-1-2 {
+        width: 150px;
+        padding: 20px;
+        margin: 10px 0;
+        box-sizing: border-box;
+        border: 2px solid red;
+    }
+
+    .c-2 {
+        width: 220px;
+        padding: 20px;
+        box-sizing: border-box;
+        border: 2px solid red;
+        margin: 10px 0;
+    }
+
+    .c-2-1 {
+        width: 150px;
+        padding: 20px;
+        box-sizing: border-box;
+        border: 2px solid red;
+        margin: 10px 0;
+    }
+
+    .c-2-1-1 {
+        width: 100px;
+        padding: 10px;
+        box-sizing: border-box;
+        border: 2px solid red;
+        margin: 10px 0;
+    }
+
+    .c-3 {
+        width: 190px;
+        padding: 20px;
+        box-sizing: border-box;
+        border: 2px solid red;
+        margin: 10px 0;
+    }
+
+    .c-3-1 {
+        width: 100px;
+        padding: 10px;
+        box-sizing: border-box;
+        border: 2px solid red;
+        margin: 10px 0;
+    }
+
+    .c-4 {
+        width: 160px;
+        padding: 20px;
+        box-sizing: border-box;
+        border: 2px solid red;
+        margin: 10px 0;
+    }
+
+    .c-4-1 {
+        width: 80px;
+        padding: 10px;
+        box-sizing: border-box;
+        border: 2px solid red;
+        margin: 10px 0;
+    }
+</style>
+
+<body>
+
+    <div id="wrap">
+        <div class="c-1">
+            Hello
+            <div class="c-1-1">Welcome</div>
+            <div class="c-1-2">to my</div>
+        </div>
+        <div class="c-2">
+            Home.
+            <div class="c-2-1">
+                I
+                <div class="c-2-1-1">feel</div>
+            </div>
+        </div>
+        <div class="c-3">
+            Happy
+            <div class="c-3-1">Today.</div>
+        </div>
+        <div class="c-4">
+            Thanks
+            <div class="c-4-1">Guys!</div>
+        </div>
+    </div>
+
+    <div class="sel-value"></div>
+
+</body>
+<script>
+    let value = ""
+    let sel = ""
+    let sel2 = ""
+    let click = 0;
+
+    function getText(firstEl, secondEl) {
+        let firstT = jQuery(firstEl).text().replace(/\s+/g, ' ').trim();
+        let secondT = jQuery(secondEl).text().replace(/\s+/g, ' ').trim();
+
+        value = firstT + " " + secondT
+        jQuery(".sel-value").text(value)
+    }
+    jQuery("#wrap div").click(function a() {
+        click++
+        if (click % 2 !== 0) {
+            sel = "." + jQuery(this).attr("class");
+        }
+        if (click % 2 === 0) {
+            sel2 = "." + jQuery(this).attr("class");
+        }
+
+        if (sel && sel2) {
+            if (sel === sel2) {
+                alert("같은 element를 선택하셨습니다.")
+                return
+            }
+            getText(sel, sel2)
+            sel = ""
+            sel2 = ""
+            return
+        }
+    })
+</script>
+
+</html>

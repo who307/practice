@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <link rel="stylesheet" href="../CSS/reset.css">
+    <script type="text/javascript"
+        src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=91oc7eyj7a"></script>
+    <script type="text/javascript"
+        src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=91oc7eyj7a&submodules=geocoder"></script>
+
+    <title>NaverMap</title>
+</head>
+<style>
+    .displaynone {
+        display: none;
+    }
+
+    .search {
+        position: absolute;
+        z-index: 1000;
+        top: 20px;
+        left: 20px;
+    }
+
+    .search #address {
+        width: 150px;
+        height: 20px;
+        line-height: 20px;
+        border: solid 1px #555;
+        padding: 5px;
+        font-size: 12px;
+        box-sizing: content-box;
+    }
+
+    .search #submit {
+        height: 30px;
+        line-height: 30px;
+        padding: 0 10px;
+        font-size: 12px;
+        border: solid 1px #555;
+        border-radius: 3px;
+        cursor: pointer;
+        box-sizing: content-box;
+    }
+
+
+    .buttons {
+        position: absolute;
+        top: 1%;
+        right: 1%;
+        z-index: 999999;
+    }
+
+    .control-btn {
+        margin: 0;
+        color: #555;
+        padding: 2px 6px;
+        background: #fff;
+        border: solid 1px #333;
+        cursor: pointer;
+        -webkit-border-radius: 5px;
+        outline: 0 none;
+        border-radius: 5px;
+        box-shadow: 2px 2px 1px 1px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    .control-on {
+        background-color: #2780E3;
+        color: #FFF;
+    }
+
+    .list-box {
+        background: #fff;
+        border: 1px solid #000;
+        height: 668px;
+        padding: 10px;
+        box-sizing: border-box;
+        position: absolute;
+        top: 50px;
+        left: 50px;
+        z-index: 9999;
+    }
+
+    .list-box>.shop-list {
+        height: 575px;
+        overflow-y: scroll;
+        position: relative;
+    }
+
+    form[name="form1"] {
+        margin-bottom: 30px;
+    }
+
+    .shop {
+        box-sizing: border-box;
+        width: 260px;
+        padding: 3px 0 4px 0px;
+        line-height: 20px;
+        border-top: 1px solid #ccc;
+    }
+
+    .shop:last-of-type {
+        border-bottom: 1px solid #ccc;
+    }
+
+    .shop>.info {
+        padding: 10px 15px 10px 30px;
+        cursor: pointer;
+        background-image: url(https://www.muji.com/storelocator/images/pc/shopcursor_down.png);
+        background-repeat: no-repeat;
+        background-position: 5px 50%;
+    }
+
+    .shop>.info:hover {
+        background-color: #f3f3f3;
+        background-image: url(https://www.muji.com/storelocator/images/pc/shopcursor_down_hover.png);
+        color: #7f0019;
+    }
+
+    .shop>.info>.name {
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .shop>.info>.location {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        word-wrap: normal;
+        overflow: hidden;
+    }
+
+    .shop>.details>.dename:hover {
+        color: #7f0019;
+        background-color: #f3f3f3;
+    }
+
+    .shop>.details>.dename {
+        font-size: 18px;
+        cursor: pointer;
+        background-image: url(https://www.muji.com/storelocator/images/pc/shopcursor_up.png);
+        background-repeat: no-repeat;
+        background-position: 5px 50%;
+        padding: 15px 15px 15px 30px;
+    }
+
+    .shop>.details>.delocation {
+        font-size: 14px;
+    }
+
+    .shop>.details .detel {
+        font-size: 13px;
+    }
+
+
+    .details>li:nth-of-type(n+2) {
+        margin-bottom: 20px;
+    }
+
+    li.detime>.detit {
+        font-weight: bold;
+        color: #999;
+    }
+</style>
+
+<body>
+
+    <!-- 지도를 표시할 div 입니다 -->
+    <div id="map" style="width : 100%; height : 100%; min-height : 740px;">
+
+        <div class="buttons">
+            <input id="NORMAL" type="button" value="일반지도" class="control-btn control-on">
+            <input id="TERRAIN" type="button" value="지형도" class="control-btn">
+            <input id="SATELLITE" type="button" value="위성지도" class="control-btn">
+            <input id="HYBRID" type="button" value="겹쳐보기" class="control-btn">
+        </div>
+
+        <div class="list-box">
+
+            <!-- .검색 폼시작 -->
+            <fieldset>
+            </fieldset>
+            <!-- .검색 폼 끝 -->
+
+            <div class="shop-list">
+                <div class="shop" data-x="" data-y="">
+                    <ul class="info">
+                        <img class="arrow" src="">
+                        <!--매장명-->
+                        <li class="name">
+                            MUJI 강남점 </li>
+                        <!--매장위치-->
+                        <li class="location">
+                            서울특별시 서초구 강남대로 419 파고다타워 1층~4층 </li>
+                        <!--영업시간-->
+                        <li class="time">
+                            11:00 ~ 22:00 </li>
+
+                    </ul>
+                    <div class="details displaynone">
+                        <!--매장명-->
+                        <li class="dename">
+                            MUJI 강남점 </li>
+                        <!--매장위치-->
+                        <li class="delocation">
+                            서울특별시 서초구 강남대로 419 파고다타워 1층~4층
+                            <!--전화번호-->
+                            <p class="detel">
+                                02-6203-7046 </p>
+                        </li>
+
+                        <!--영업시간-->
+                        <li class="detime">
+                            <p class="detit">영업 시간</p>
+                            11:00 ~ 22:00
+                        </li>
+                    </div>
+
+                </div>
+                <div class="shop" data-x="" data-y="">
+                    <ul class="info">
+                        <img class="arrow" src="">
+                        <!--매장명-->
+                        <li class="name">
+                            MUJI 김포공항점 </li>
+                        <!--매장위치-->
+                        <li class="location">
+                            서울특별시 강서구 하늘길 38 롯데몰 김포공항점 지하 1F </li>
+                        <!--영업시간-->
+                        <li class="time">
+                            10:30～22:00 </li>
+
+                    </ul>
+                    <div class="details displaynone">
+                        <!--매장명-->
+                        <li class="dename">
+                            MUJI 김포공항점 </li>
+                        <!--매장위치-->
+                        <li class="delocation">
+                            서울특별시 강서구 하늘길 38 롯데몰 김포공항점 지하 1F
+                            <!--전화번호-->
+                            <p class="detel">
+                                02-6116-5330 </p>
+                        </li>
+
+                        <!--영업시간-->
+                        <li class="detime">
+                            <p class="detit">영업 시간</p>
+                            10:30～22:00
+                        </li>
+                    </div>
+
+                </div>
+                <div class="shop" data-x="" data-y="">
+                    <ul class="info">
+                        <img class="arrow" src="">
+                        <!--매장명-->
+                        <li class="name">
+                            MUJI 디큐브시티점 </li>
+                        <!--매장위치-->
+                        <li class="location">
+                            서울특별시 구로구 경인로 662 현대백화점 D-CUBE city 지하 1F </li>
+                        <!--영업시간-->
+                        <li class="time">
+                            일-목요일 11:00 ~ 21:30 금-토요일 11:00 ~ 22:00 </li>
+
+                    </ul>
+                    <div class="details displaynone">
+                        <!--매장명-->
+                        <li class="dename">
+                            MUJI 디큐브시티점 </li>
+                        <!--매장위치-->
+                        <li class="delocation">
+                            서울특별시 구로구 경인로 662 현대백화점 D-CUBE city 지하 1F
+                            <!--전화번호-->
+                            <p class="detel">
+                                02-2210-9068 </p>
+                        </li>
+
+                        <!--영업시간-->
+                        <li class="detime">
+                            <p class="detit">영업 시간</p>
+                            일-목요일 11:00 ~ 21:30 금-토요일 11:00 ~ 22:00
+                        </li>
+                    </div>
+
+                </div>
+                <div class="shop" data-x="" data-y="">
+                    <ul class="info">
+                        <img class="arrow" src="">
+                        <!--매장명-->
+                        <li class="name">
+                            MUJI 메세나폴리스점 </li>
+                        <!--매장위치-->
+                        <li class="location">
+                            서울특별시 마포구 양화로 45 메세나폴리스 1F </li>
+                        <!--영업시간-->
+                        <li class="time">
+                            11:00～22:00 </li>
+
+                    </ul>
+                    <div class="details displaynone">
+                        <!--매장명-->
+                        <li class="dename">
+                            MUJI 메세나폴리스점 </li>
+                        <!--매장위치-->
+                        <li class="delocation">
+                            서울특별시 마포구 양화로 45 메세나폴리스 1F
+                            <!--전화번호-->
+                            <p class="detel">
+                                02-323-5280 </p>
+                        </li>
+
+                        <!--영업시간-->
+                        <li class="detime">
+                            <p class="detit">영업 시간</p>
+                            11:00～22:00
+                        </li>
+                    </div>
+
+                </div>
+                <div class="shop" data-x="" data-y="">
+                    <ul class="info">
+                        <img class="arrow" src="">
+                        <!--매장명-->
+                        <li class="name">
+                            MUJI 신촌점 </li>
+                        <!--매장위치-->
+                        <li class="location">
+                            서울특별시 서대문구 연세로 12 피델리아빌딩 1층 - 5층 무인양품 </li>
+                        <!--영업시간-->
+                        <li class="time">
+                            월~일요일 12:00~21:30 </li>
+
+                    </ul>
+                    <div class="details displaynone">
+                        <!--매장명-->
+                        <li class="dename">
+                            MUJI 신촌점 </li>
+                        <!--매장위치-->
+                        <li class="delocation">
+                            서울특별시 서대문구 연세로 12 피델리아빌딩 1층 - 5층 무인양품
+                            <!--전화번호-->
+                            <p class="detel">
+                            </p>
+                        </li>
+
+                        <!--영업시간-->
+                        <li class="detime">
+                            <p class="detit">영업 시간</p>
+                            월~일요일 12:00~21:30
+                        </li>
+                    </div>
+
+                </div>
+                <div class="shop" data-x="" data-y="">
+                    <ul class="info">
+                        <img class="arrow" src="">
+                        <!--매장명-->
+                        <li class="name">
+                            MUJI AK 홍대점 </li>
+                        <!--매장위치-->
+                        <li class="location">
+                            서울특별시 마포구 양화로 188,AK&amp; 홍대 3층 </li>
+                        <!--영업시간-->
+                        <li class="time">
+                            오전 11:00 - 오후 10:00 </li>
+
+                    </ul>
+                    <div class="details displaynone">
+                        <!--매장명-->
+                        <li class="dename">
+                            MUJI AK 홍대점 </li>
+                        <!--매장위치-->
+                        <li class="delocation">
+                            서울특별시 마포구 양화로 188,AK&amp; 홍대 3층
+                            <!--전화번호-->
+                            <p class="detel">
+                                02-789-9835 </p>
+                        </li>
+
+                        <!--영업시간-->
+                        <li class="detime">
+                            <p class="detit">영업 시간</p>
+                            오전 11:00 - 오후 10:00
+                        </li>
+                    </div>
+
+                </div>
+                <div class="shop" data-x="" data-y="">
+                    <ul class="info">
+                        <img class="arrow" src="">
+                        <!--매장명-->
+                        <li class="name">
+                            MUJI 일산점 </li>
+                        <!--매장위치-->
+                        <li class="location">
+                            경기도 고양시 일산동구 중앙로 1283 롯데백화점 일산점 지하 1F </li>
+                        <!--영업시간-->
+                        <li class="time">
+                            10:30～20:00 </li>
+
+                    </ul>
+                    <div class="details displaynone">
+                        <!--매장명-->
+                        <li class="dename">
+                            MUJI 일산점 </li>
+                        <!--매장위치-->
+                        <li class="delocation">
+                            경기도 고양시 일산동구 중앙로 1283 롯데백화점 일산점 지하 1F
+                            <!--전화번호-->
+                            <p class="detel">
+                                031-909-3188 </p>
+                        </li>
+
+                        <!--영업시간-->
+                        <li class="detime">
+                            <p class="detit">영업 시간</p>
+                            10:30～20:00
+                        </li>
+                    </div>
+
+                </div>
+                <div class="shop" data-x="" data-y="">
+                    <ul class="info">
+                        <img class="arrow" src="">
+                        <!--매장명-->
+                        <li class="name">
+                            MUJI 롯데마트 잠실점 </li>
+                        <!--매장위치-->
+                        <li class="location">
+                            서울특별시 송파구 올림픽로 240 롯데마트 잠실점 1F </li>
+                        <!--영업시간-->
+                        <li class="time">
+                            MON-SUN 10:00-22:00 </li>
+
+                    </ul>
+                    <div class="details displaynone">
+                        <!--매장명-->
+                        <li class="dename">
+                            MUJI 롯데마트 잠실점 </li>
+                        <!--매장위치-->
+                        <li class="delocation">
+                            서울특별시 송파구 올림픽로 240 롯데마트 잠실점 1F
+                            <!--전화번호-->
+                            <p class="detel">
+                                02-411-0912 </p>
+                        </li>
+
+                        <!--영업시간-->
+                        <li class="detime">
+                            <p class="detit">영업 시간</p>
+                            MON-SUN 10:00-22:00
+                        </li>
+                    </div>
+
+                </div>
+                <div class="shop" data-x="" data-y="">
+                    <ul class="info">
+                        <img class="arrow" src="">
+                        <!--매장명-->
+                        <li class="name">
+                            MUJI 영플라자점 </li>
+                        <!--매장위치-->
+                        <li class="location">
+                            서울특별시 중구 남대문로 67 롯데백화점 본점 영플라자 5F </li>
+                        <!--영업시간-->
+                        <li class="time">
+                            월-일 11:30～21:30 </li>
+
+                    </ul>
+                    <div class="details displaynone">
+                        <!--매장명-->
+                        <li class="dename">
+                            MUJI 영플라자점 </li>
+                        <!--매장위치-->
+                        <li class="delocation">
+                            서울특별시 중구 남대문로 67 롯데백화점 본점 영플라자 5F
+                            <!--전화번호-->
+                            <p class="detel">
+                                02-2118-5191 </p>
+                        </li>
+
+                        <!--영업시간-->
+                        <li class="detime">
+                            <p class="detit">영업 시간</p>
+                            월-일 11:30～21:30
+                        </li>
+                    </div>
+
+                </div>
+                <div class="shop" data-x="" data-y="">
+                    <ul class="info">
+                        <img class="arrow" src="">
+                        <!--매장명-->
+                        <li class="name">
+                            MUJI 서울역점 </li>
+                        <!--매장위치-->
+                        <li class="location">
+                            서울특별시 중구 청파로 426 롯데마트 서울역점 3F </li>
+                        <!--영업시간-->
+                        <li class="time">
+                            월~일요일 10:00~22:00 </li>
+
+                    </ul>
+                    <div class="details displaynone">
+                        <!--매장명-->
+                        <li class="dename">
+                            MUJI 서울역점 </li>
+                        <!--매장위치-->
+                        <li class="delocation">
+                            서울특별시 중구 청파로 426 롯데마트 서울역점 3F
+                            <!--전화번호-->
+                            <p class="detel">
+                                02-365-5321 </p>
+                        </li>
+
+                        <!--영업시간-->
+                        <li class="detime">
+                            <p class="detit">영업 시간</p>
+                            월~일요일 10:00~22:00
+                        </li>
+                    </div>
+
+                </div>
+            </div>
+            <!--. 게시글 리스트 끝 -->
+        </div>
+    </div>
+</body>
+
+
+
+<script>
+    jQuery(document).ready(function () {
+
+        var map = new naver.maps.Map("map", {
+            zoom: 14
+        })
+
+        var infoWindow
+        var marker
+        var markerList = [];
+        var infoList = [];
+
+        function setGeoCode(callback) {
+            console.log("1")
+
+            jQuery('.shop').each(function (i) {
+                console.log(i)
+                var _this = jQuery(this)
+                naver.maps.Service.geocode({
+                    address: jQuery(this).find(".info>.location").text(),
+                }, function (status, response) {
+                    if (status !== naver.maps.Service.Status.OK) {
+                        return alert('Something wrong!');
+                    }
+
+                    var result = response.result, // 검색 결과의 컨테이너
+                        items = result.items; // 검색 결과의 배열
+
+                    _this.attr("data-x", items[1].point.x)
+                    _this.attr("data-y", items[1].point.y)
+                    console.log("주소 좌표전환")
+
+                })
+            })
+            setTimeout(callback, 500)
+
+        }
+        function setMarker() {
+            console.log("마커생성 실행")
+            jQuery(".shop").each(function (i) {
+
+
+                var _this = jQuery(this)
+                var idx = i;
+                var contentString = _this.find(".details").html();
+
+                infowindow = new naver.maps.InfoWindow({
+                    content: contentString,
+                    anchorSkew: true
+                });
+                infoList.push(infowindow);
+                marker = new naver.maps.Marker({
+                    num: idx,
+                    position: new naver.maps.LatLng(_this.attr("data-y"), _this.attr("data-x")),
+                    map: map
+                });
+                markerList.push(marker)
+
+
+                // 마커 클릭 시 지도 이동, 지도 정보노출 함수 선언
+                naver.maps.Event.addListener(markerList[idx], 'click', function (e) {
+                    map.panTo(new naver.maps.LatLng(markerList[idx].position.y, markerList[idx].position.x));
+
+                    infoList[markerList[idx].num].close();
+                    infoList[markerList[idx].num].open(map, markerList[idx]);
+
+                    storeClick(jQuery(".shop").eq(markerList[idx].num))
+
+                });
+            })
+
+            // 첫번째 스토어로 지도 위치 이동
+            map.panTo(new naver.maps.LatLng(markerList[0].position.y, markerList[0].position.x));
+
+        }
+        if (jQuery(".list-box>.shop-list>.shop").length > 0) {
+            setGeoCode(setMarker)
+        }
+        // function firstMove() {
+        //movedMap(jQuery(".shop:first-of-type").attr("data-x"), jQuery(".shop:first-of-type").attr("data-y"), markerList[0], infoList[0])
+        // storeClick(jQuery(".shop").eq(0))
+        //  }
+        // setTimeout(function () {
+        //   firstMove();
+
+        //}, 500)
+
+        // 스토어 리스트 클릭 시 지도 위치 이동
+        jQuery(".shop").click(function () {
+            let idx = jQuery(this).index();
+
+            let dataX = jQuery(this).attr("data-x")
+            let dataY = jQuery(this).attr("data-y")
+            movedMap(dataX, dataY, markerList[idx], infoList[idx])
+
+        })
+
+        // 지도 이동 함수
+        function movedMap(dataX, dataY, clickMarker, clickInfo) {
+            map.panTo(new naver.maps.LatLng(dataY, dataX));
+            clickInfo.open(map, clickMarker);
+
+        }
+
+
+        // 지도 형태 변경 클릭 이벤트
+        var btns = jQuery(".buttons > input");
+        btns.on("click", function (e) {
+            e.preventDefault();
+
+            var mapTypeId = this.id;
+
+            if (map.getMapTypeId() !== naver.maps.MapTypeId[mapTypeId]) {
+                map.setMapTypeId(naver.maps.MapTypeId[mapTypeId]); // 지도 유형 변경하기
+
+                btns.removeClass("control-on");
+                jQuery(this).addClass("control-on");
+            }
+        });
+
+        // 스토어 리스트 슬라이드 애니메이션
+        function storeClick(_this) {
+            if (_this.find(".details").is(":visible")) {
+                _this.find(".info").slideDown();
+                _this.find(".details").slideUp(200);
+                return false;
+            }
+            jQuery(".shop").find(".details").slideUp(200);
+            jQuery(".shop").find(".info").slideDown();
+            _this.find(".info").slideUp(200);
+            _this.find(".details").slideDown();
+            moveScroll(_this)
+        }
+        jQuery(".shop").click(function () {
+            storeClick(jQuery(this))
+            console.log(jQuery(this))
+        })
+        //스크롤 세로 가운데
+        function moveScroll(_this) {
+
+        }
+
+        jQuery(".search-check.hide>input.MS_input_checkbox").prop("checked", true)
+
+    })
+
+
+</script>
+
+</html>

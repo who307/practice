@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.9.7/jquery.fullpage.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.9.7/jquery.fullpage.css"></script>
+    <script src="/JS/test.js" defer></script>
+    <link rel="stylesheet" href="../CSS/reset.css">
+
+
+    <title>바닐라js 메뉴</title>
+</head>
+<style>
+    .toggleList {
+        width: 800px;
+        height: 100%;
+        margin: 0 auto;
+    }
+
+    .toggleList .listBox {
+        width: 25%;
+        float: left;
+        margin: auto;
+    }
+
+    .listName {
+        text-align: center;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .listDsc {
+        display: block;
+        height: 0;
+        visibility: hidden;
+        overflow-y: hidden;
+        text-align: center;
+        transition: height .5s, visibility .5s;
+        margin-top: 20px;
+    }
+
+    .open {
+        height: 10vw;
+        visibility: visible;
+    }
+
+    .modal {
+        width: 500px;
+        height: 600px;
+        position: fixed;
+        top: 70%;
+        left: 50%;
+        transform: translate(-50%, -70%);
+        background: lightsalmon;
+        display: none;
+
+    }
+
+    .modal .listName {
+        font-size: 24px;
+        list-style: none;
+    }
+
+    .modal .listDsc {
+        font-size: 20px;
+    }
+
+    .modal img {
+        display: block;
+        margin: 0 auto;
+        width: 300px;
+
+    }
+
+    .show {
+        display: block;
+    }
+
+    .random {
+        position: fixed;
+        display: flex;
+    }
+
+    .random li {
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        margin: 0 10px;
+    }
+</style>
+
+<body>
+    <ul class="toggleList">
+        <div class="listBox"
+            data-img="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRp0Lj0MGvRTe2BnUxBV39vnkS1CN1q2klWMg&usqp=CAU">
+            <li class="listName">리스트1</li>
+            <li class="listDsc"> 1
+                corrupti nulla
+
+                perferendis est eligendi laboriosam expedita atque rerum, voluptatibus similique? Iste tempora cumque,
+
+                repudiandae sapiente quaerat.
+            </li>
+            <img>
+        </div>
+        <div class="listBox"
+            data-img="https://previews.123rf.com/images/tolokonov/tolokonov1206/tolokonov120600069/14231293-%EB%B0%9D%EC%9D%80-%ED%83%9C%EC%96%91-%EC%B6%94%EC%83%81-%EC%9E%90%EC%97%B0-%EB%B0%B0%EA%B2%BD%EC%97%90%EC%84%9C.jpg">
+            <li class="listName">리스트2</li>
+            <li class="listDsc"> 2Lorem ipsum dolor sit amet, consectetur adipisicing elit. A ab eveniet temporibus
+                ipsam
+                perferendis est eligendi laboriosam expedita atque rerum, voluptatibus similique? Iste tempora cumque,
+
+                repudiandae sapiente quaerat.
+            </li>
+            <img>
+        </div>
+        <div class="listBox"
+            data-img="https://www.sciencetimes.co.kr/wp-content/uploads/2020/02/environmental-education-480x266.jpg">
+            <li class="listName">리스트3</li>
+            <li class="listDsc"> 3Lorem ipsum dolor sit amet, consectetur adipisicing elit. A ab eveniet temporibus
+                ipsam
+                corrupti nulla
+                repudiandae sapiente quaerat.
+            </li>
+            <img>
+        </div>
+        <div class="listBox"
+            data-img="https://post-phinf.pstatic.net/MjAxODA3MTlfMjkx/MDAxNTMxOTkxODI4OTc2.TB_MCNmOlZZFOwRQlcidCx0pIQNE12ix0aYDqAG-JJUg.r6NyrLaXUs0rxX8TcaumimaSDZxe6SNDrHMbQz2FgIsg.JPEG/1.jpg?type=w1200">
+            <li class="listName">리스트4</li>
+            <li class="listDsc"> 4Lorem ipsum dolor sit amet, consectetur adipisicing elit. A ab eveniet temporibus
+                ipsam
+                corrupti nulla
+                perferendis est eligendi laboriosam expedita atque rerum, voluptatibus similique? Iste tempora cumque,
+
+            </li>
+            <img>
+        </div>
+    </ul>
+    <div>
+
+        <div class="modal">
+
+        </div>
+
+</body>
+<script>
+    function setHide() {
+        let dsc = document.querySelectorAll(".listDsc");
+        for (let _dsc of dsc) {
+            _dsc.classList.remove("open");
+        }
+    }
+    function modalHide() {
+        let modal = document.querySelector(".modal")
+        modal.classList.toggle("show")
+    }
+    const selectAll = (selector) => {
+        let sel = document.querySelectorAll(selector);
+        sel.forEach((value, num) => {
+            value.addEventListener("mouseenter", (e) => {
+
+                let _target = e.target;
+                let _child = _target.children[1];
+                if (_child.classList.contains("open") === true) {
+                    _child.classList.remove("open")
+                    return;
+                }
+                setHide();
+
+                _child.classList.add("open");
+
+            })
+            value.addEventListener("mouseleave", (e) => {
+                modalHide();
+                setHide();
+            })
+        })
+    }
+    const getData = (get, set) => {
+        let getItem = document.querySelectorAll(get);
+        let setItem = document.querySelector(set)
+
+        getItem.forEach((value, num) => {
+            value.addEventListener("mouseenter", (e) => {
+                modalHide();
+                let tar = e.currentTarget;
+                setItem.innerHTML = tar.innerHTML
+                setItem.children[2].setAttribute("src", tar.dataset.img)
+            })
+        })
+    }
+
+    selectAll(".listBox")
+    getData(".listBox", ".modal")
+
+    jQuery(document).ready(function () {
+        var _ = jQuery;
+        var len = _(".random li").length;
+        _(".random").each(function () {
+            var ul = _(this);
+            var liArr = ul.children('li');
+            liArr.sort(function () {
+                var ran = parseInt(Math.random() * len);
+                var ran1 = parseInt(Math.random() * len);
+
+                return ran1 - ran;
+
+            }).appendTo(ul);
+
+        });
+        jQuery(".random li").each(function () {
+            var _this = $(this);
+            var x = Math.ceil(Math.random() * 255)
+            var y = Math.ceil(Math.random() * 255)
+            var z = Math.ceil(Math.random() * 255)
+            _this.css("background", "rgb(" + x + "," + y + "," + z + ")")
+
+        });
+    });
+    
+
+
+</script>
+
+</html>

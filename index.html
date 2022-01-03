@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="../JS/test.js" defer></script>
+
+    <link rel="stylesheet" href="./CSS/reset.css">
+    <title>연습</title>
+</head>
+<style>
+    .menu {
+        width: 1000px;
+        display: flex;
+        margin: 50px auto 150px;
+    }
+
+    .menu li {
+        float: left;
+        margin-right: auto;
+    }
+
+    .menu li:last-of-type {
+        margin-right: 0;
+    }
+
+    .menu li a {
+        font-size: 18px;
+        font-weight: 600;
+        position: relative;
+        text-transform: uppercase;
+        color: #000;
+    }
+
+    .menu li a::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%) translateZ(0);
+        bottom: -4px;
+        width: 0%;
+        height: 2px;
+        background: #000;
+        transition: width 0.4s;
+
+    }
+
+    .menu li:hover a::before {
+        content: "";
+        width: 100%;
+    }
+
+</style>
+
+<body>
+    <ul class="menu">
+        <li><a href="HTML/swiper.html" target="_blank">swiper</a></li>
+        <li><a href="HTML/fullpage.html" target="_blank">fullpage</a></li>
+        <li><a href="HTML/googleMap.html" target="_blank">googleMap</a></li>
+        <li><a href="HTML/header_gauge.html" target="_blank">header Gauge</a></li>
+        <li><a href="HTML/randomSort.html" target="_blank">random Sort</a></li>
+        <li><a href="HTML/vanilla_menu.html" target="_blank">vanilla menu</a></li>
+        <li><a href="HTML/getText.html" target="_blank">get text</a></li>
+        <li><a href="HTML/timer.html" target="_blank">timer</a></li>
+    </ul>
+
+
+</body>
+<script>
+
+</script>
+
+</html>
